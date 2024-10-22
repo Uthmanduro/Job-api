@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+enum Role {
+  Admin
+  User
+}
+
+
+model User {
+  id              String     @id @map("_id") @default(auto()) @db.ObjectId
+  name            String
+  email           String     @unique
+  password        String
+  phoneNumber     String?
+  resumeUrl       String?
+  profilePicUrl   String?
+  workExperience  String?
+  role            Role       @default(User)
+  jobs            Job[]
+  applications    Application[]
+}
+
+enum JobType {
+  FullTime
+  PartTime
+  Contract
+}
+
+model Job {
+  id                      String        @id   @map("_id") @default(auto()) @db.ObjectId
+  title                   String
+  companyName             String
+  jobDescription          String
+  location                String
+  jobType                 JobType 
+  salaryRange             String?
+  category                String    
+  applicationDeadline     DateTime
+  recruiter               User         @relation(fields: [recruiterId], references: [id])
+  recruiterId             String       @db.ObjectId
+  applications            Application[]
+}
+
+enum ApplicationStatus {
+  Delivered
+  Reviewed
+  Rejected
+  Accepted
+}
+
+model Application {
+  id              String              @id   @map("_id")   @default(auto())  @db.ObjectId
+  coverLetter     String
+  resumeUrl       String
+  status          ApplicationStatus   @default(Delivered)
+  appliedAt       DateTime            @default(now())
+  job             Job                 @relation(fields: [jobId], references: [id])
+  jobId           String              @db.ObjectId
+  applicant       User                @relation(fields: [applicantId], references: [id])
+  applicantId     String              @db.ObjectId
+}
