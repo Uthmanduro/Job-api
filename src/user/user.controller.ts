@@ -6,55 +6,55 @@ import {
   Patch, 
   Param, 
   Delete, 
-  UseGuards, 
-  UseInterceptors, 
-  UploadedFiles,
-  BadRequestException
+  UseGuards,
+  Req
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard, AdminGuard } from 'src/auth/auth.guard';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
+@ApiTags('User')
 export class UserController {
   constructor(private readonly userService: UserService,) {}
 
   @Post('signup')
-  // @UseInterceptors(FileFieldsInterceptor([
-  //   { name: 'resumeUrl', maxCount: 1 },
-  //   { name: 'profilePicUrl', maxCount: 1 },
-  // ]))
   async create(
-    @Body() createUserDto: CreateUserDto, 
-    // @UploadedFiles() files: { resumeUrl?: Express.Multer.File[], profilePicUrl?: Express.Multer.File[] }
+    @Body() createUserDto: CreateUserDto,
   ) {
-    // const result = await this.userService.uploadImages(files)
     return this.userService.create(createUserDto);
   }
 
-  @Get()
+  @Get('all')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard, AdminGuard)
   findAll() {
     return this.userService.findAll();
   }
 
-  @Get(':id')
+  @Get()
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  findOne(@Param('id') id: string) {
+  findOne(@Req() request: Request) {
+    const id = request['user'].sub;
     return this.userService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch()
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Req() request: Request, @Body() updateUserDto: UpdateUserDto) {
+    const id = request['user'].sub;
     return this.userService.update(id, updateUserDto);
   }
-
-  @Delete(':id')
+  
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  remove(@Param('id') id: string) {
+  @Delete()
+  remove(@Req() request: Request) {
+    const id = request['user'].sub;
     return this.userService.remove(id);
   }
 }

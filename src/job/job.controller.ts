@@ -3,9 +3,12 @@ import { JobService } from './job.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { AuthGuard, AdminGuard } from 'src/auth/auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('job')
 @UsePipes(ValidationPipe)
+@ApiTags('Job')
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
 export class JobController {
   constructor(private readonly jobService: JobService) {}

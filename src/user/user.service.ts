@@ -18,7 +18,7 @@ export class UserService {
   }
 
   async uploadImage(file: Express.Multer.File) {
-    return new Promise((resolve, reject) => {
+    const picture_url =  new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream((error, result) => {
         if (error) {
           reject(error);
@@ -26,12 +26,8 @@ export class UserService {
         resolve(result);
       }).end(file.buffer);
     });
-  }
 
-  // For multiple files
-  async uploadImages(files: Express.Multer.File[]) {
-    const uploadPromises = files.map(file => this.uploadImage(file)); 
-    return Promise.all(uploadPromises); 
+
   }
 
   async create(userData: Prisma.UserCreateInput) {
@@ -43,8 +39,8 @@ export class UserService {
   }
 
 
-  findAll() {
-    return this.prisma.user.findMany({
+  async findAll() {
+    return await this.prisma.user.findMany({
       include: {
         jobs: true,
         applications: true
@@ -52,15 +48,15 @@ export class UserService {
     });
   }
 
-  findOne(id: string) {
-    return this.prisma.user.findUnique({ where: {id}});
+  async findOne(id: string) {
+    return await this.prisma.user.findUnique({ where: {id}});
   }
 
-  update(id: string, updateUserData: UpdateUserDto) {
-    return this.prisma.user.update({ where: { id }, data: updateUserData });
+  async update(id: string, updateUserData: UpdateUserDto) {
+    return await this.prisma.user.update({ where: { id }, data: updateUserData });
   }
 
-  remove(id: string) {
-    return this.prisma.user.delete({where: {id} });
+  async remove(id: string) {
+    return await this.prisma.user.delete({where: {id} });
   }
 }

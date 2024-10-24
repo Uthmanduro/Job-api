@@ -8,8 +8,8 @@ export class CreateUserDto {
     email:           string
     password:        string
     phoneNumber:     string
-    resumeURL:       string
-    profilePicURL:   string
+    resumeUrl:       string
+    profilePicUrl:   string
     workExperience:  string
     role:            Role
 }
