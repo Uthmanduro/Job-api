@@ -17,9 +17,15 @@ export class UserService {
     return await bcrypt.hash(password, salt);
   }
 
-  async uploadImage(file: Express.Multer.File) {
-    const picture_url =  new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream((error, result) => {
+  async uploadFile(file: Express.Multer.File): Promise<UploadApiResponse> {
+    let resourceType;
+    if (file.mimetype.startsWith('image/')) {
+      resourceType = 'image'; // It's an image file
+    } else {
+      resourceType = 'raw'; // It's a non-image file
+    }
+    return new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream({ resource_type: resourceType },(error, result) => {
         if (error) {
           reject(error);
         }

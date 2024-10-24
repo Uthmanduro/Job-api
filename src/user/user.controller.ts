@@ -7,13 +7,16 @@ import {
   Param, 
   Delete, 
   UseGuards,
-  Req
+  Req,
+  UseInterceptors,
+  UploadedFile
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard, AdminGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 @ApiTags('User')
@@ -25,6 +28,24 @@ export class UserController {
     @Body() createUserDto: CreateUserDto,
   ) {
     return this.userService.create(createUserDto);
+  }
+
+  @Post('uploadProfilePic')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(@Req() request: Request, @UploadedFile() file: Express.Multer.File) {
+    const uploadedFile = await this.userService.uploadFile(file)
+    const id = request['user'].sub;
+    return this.userService.update(id, {"profilePicUrl": uploadedFile.secure_url});
+  }
+
+  @Post('uploadResume')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadResume(@Req() request: Request, @UploadedFile() file: Express.Multer.File) {
+    const uploadedFile = await this.userService.uploadFile(file)
+    const id = request['user'].sub;
+    return this.userService.update(id, {"resumeUrl": uploadedFile.secure_url});
   }
 
   @Get('all')
