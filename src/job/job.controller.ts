@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UsePipes,
+  ValidationPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { JobService } from './job.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
@@ -9,18 +20,16 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 @UsePipes(ValidationPipe)
 @ApiTags('Job')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
   @Post()
-  @UseGuards(AdminGuard)
-  create(@Body() {recruiterId, ...createJobData}: CreateJobDto) {
-    return this.jobService.createJob(recruiterId, createJobData );
+  @UseGuards(AuthGuard, AdminGuard)
+  create(@Body() { recruiterId, ...createJobData }: CreateJobDto) {
+    return this.jobService.createJob(recruiterId, createJobData);
   }
 
-  @Get() 
-  @UseGuards(AdminGuard)
+  @Get()
   findAll() {
     return this.jobService.findAll();
   }
@@ -31,13 +40,13 @@ export class JobController {
   }
 
   @Patch(':id')
-  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
     return this.jobService.update(id, updateJobDto);
   }
 
   @Delete(':id')
-  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   remove(@Param('id') id: string) {
     return this.jobService.remove(id);
   }

@@ -15,8 +15,8 @@ datasource db {
 
 
 enum Role {
-  Admin
-  User
+  ADMIN
+  USER
 }
 
 
@@ -29,15 +29,15 @@ model User {
   resumeUrl       String?
   profilePicUrl   String?
   workExperience  String?
-  role            Role       @default(User)
+  role            Role       @default(USER)
   jobs            Job[]
   applications    Application[]
 }
 
 enum JobType {
-  FullTime
-  PartTime
-  Contract
+  FULLTIME
+  PARTTIME
+  CONTRACT
 }
 
 model Job {
@@ -46,7 +46,7 @@ model Job {
   companyName             String
   jobDescription          String
   location                String
-  jobType                 JobType 
+  jobType                 JobType      @default(FULLTIME)
   salaryRange             String?
   category                String    
   applicationDeadline     DateTime
@@ -56,17 +56,17 @@ model Job {
 }
 
 enum ApplicationStatus {
-  Delivered
-  Reviewed
-  Rejected
-  Accepted
+  APPLIED
+  REVIEWED
+  REJECTED
+  ACCEPTED
 }
 
 model Application {
   id              String              @id   @map("_id")   @default(auto())  @db.ObjectId
   coverLetter     String
   resumeUrl       String
-  status          ApplicationStatus   @default(Delivered)
+  status          ApplicationStatus   @default(APPLIED)
   appliedAt       DateTime            @default(now())
   job             Job                 @relation(fields: [jobId], references: [id])
   jobId           String              @db.ObjectId

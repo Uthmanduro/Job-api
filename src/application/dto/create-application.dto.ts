@@ -1,16 +1,15 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { ApplicationStatus } from "@prisma/client"
+import { ApiProperty } from '@nestjs/swagger';
+import { ApplicationStatus } from '@prisma/client';
+import { IsEnum } from 'class-validator';
 
 export class CreateApplicationDto {
-    @ApiProperty()
-    coverLetter: string
+  @ApiProperty()
+  coverLetter: string;
 
-    @ApiProperty()
-    resumeUrl: string
+  @ApiProperty()
+  resumeUrl: string;
 
-    @ApiProperty()
-    status: ApplicationStatus
-
-    @ApiProperty()
-    applicantId: string
+  @ApiProperty({ enum: ApplicationStatus })
+  @IsEnum(ApplicationStatus)
+  status: ApplicationStatus;
 }
