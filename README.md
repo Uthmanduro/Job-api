@@ -1,30 +1,74 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Job Board API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Overview
+A RESTful API for a job board platform that connects job seekers with employers. Built with NestJS, MongoDB, and Prisma, featuring authentication, job listings, user profiles, and application management.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tech Stack
+- **Backend Framework**: NestJS (with Express) + TypeScript
+- **Database**: MongoDB (local/Atlas)
+- **ORM**: Prisma
+- **File Storage**: Cloudinary
+- **API Documentation**: Swagger/OpenAPI
 
-## Description
+## Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Authentication & Authorization
+- JWT-based authentication
+- Two user roles:
+  - Admin (Company): Can post, update, and delete jobs
+  - User (Job Seeker): Can browse jobs and submit applications
+
+### Job Listings
+- Full CRUD operations for job postings
+- Job fields include:
+  - Title, company name, description
+  - Location, job type (Full-time/Part-time/Contract)
+  - Salary range, application deadline
+- Filtering by category, location, and job type
+
+### User Profiles
+- Profile management for job seekers
+- Upload resumes and profile pictures (stored in Cloudinary)
+- Profile information:
+  - Personal details (name, email, phone)
+  - Resume URL, profile picture URL
+  - Work experience and skills (optional)
+
+### Job Applications
+- Users can apply to jobs
+- Admins can view all applications for their postings
+- Basic application status management (reject/proceed)
+
+### Admin Dashboard
+- View all posted jobs
+- Manage applications (view resumes, contact details)
+- Application status updates
+
+## API Documentation
+Full API documentation available via Swagger UI:
+- [Local Development](http://localhost:3000/api) (when running locally)
+- [Live Documentation](#) (add your hosted link here)
+
+## Database Schema (Prisma)
+Key models include:
+- User
+- JobListing
+- Application
+- (See `prisma/schema.prisma` for full details)
+
+## Setup Instructions
+
+### Prerequisites
+- Node.js (v16+ recommended)
+- MongoDB (local or Atlas URI)
+- Cloudinary account (for file storage)
+- npm or yarn
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone [repository-url]
+   cd job-board-api
 
 ## Project setup
 
